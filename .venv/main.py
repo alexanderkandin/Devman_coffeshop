@@ -36,11 +36,15 @@ def main():
     with open('coffee.json', 'r', encoding='CP1251') as my_file:
         file_contents = json.loads(my_file.read())
 
+
     location = input('Укажите локацию: ')
     location_x,location_y = fetch_coordinates(apikey,location)
     your_location = (location_x,location_y)
 
+
     coffeeshop = []
+
+
     for coffee_shop in file_contents:
         coffe_name = coffee_shop['Name']
         coffe_coordinates = coffee_shop['geoData']['coordinates']
@@ -71,6 +75,7 @@ def main():
 
 
     m.save('map.html')
+
 
     app = Flask(__name__)
     app.add_url_rule('/', 'hello', coffeeshop_map)
