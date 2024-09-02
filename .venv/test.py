@@ -1,4 +1,2 @@
-from main import main
-
-if __name__ == "__main__":
-    main()
+import os
+print(os.environ.get('RRR'))

@@ -1,19 +1,19 @@
+import os
 import json
 import requests
 import folium
 from geopy import distance
-from pprint import pprint
 from flask import Flask
 
 
-apikey = 'b222220d-81ea-4425-bff5-8f6f8fe47f65'
+API_KEY = os.environ.get('APIKEY')
 
 
-def fetch_coordinates(apikey, address):
+def fetch_coordinates(API_KEY, address):
     base_url = "https://geocode-maps.yandex.ru/1.x"
     response = requests.get(base_url, params={
         "geocode": address,
-        "apikey": apikey,
+        "apikey": API_KEY,
         "format": "json",
     })
     response.raise_for_status()
@@ -29,7 +29,7 @@ def fetch_coordinates(apikey, address):
 
 def coffeeshop_map():
     with open('map.html') as file:
-      return file.read()
+        return file.read()
 
 
 def main():
@@ -38,7 +38,7 @@ def main():
 
 
     location = input('Укажите локацию: ')
-    location_x,location_y = fetch_coordinates(apikey,location)
+    location_x,location_y = fetch_coordinates(API_KEY,location)
     your_location = (location_x,location_y)
 
 
