@@ -1,8 +1,9 @@
 import json
 import requests
-import Folium
+import folium
 from geopy import distance
 from pprint import pprint
+from flask import Flask
 
 apikey = 'b222220d-81ea-4425-bff5-8f6f8fe47f65'
 
@@ -29,15 +30,12 @@ location_x,location_y = fetch_coordinates(apikey,location)
 your_location = (location_x,location_y)
 
 
-wellington = (-41.32, 174.81)
-salamanca = (40.96, -5.50)
-x= (distance.distance(wellington, salamanca).km)
-
-
 with open('coffee.json', 'r', encoding='CP1251') as my_file:
     file_contents = json.loads(my_file.read())
 
+
 coffeeshop = []
+
 
 for index, coffee_shop in enumerate(file_contents, start=1):
     coffe_name = coffee_shop['Name']
@@ -49,16 +47,37 @@ for index, coffee_shop in enumerate(file_contents, start=1):
     coffe['latitude'] = coffe_coordinates[1]
     coffe['longitude'] = coffe_coordinates[0]
     coffeeshop.append(coffe)
-# pprint(coffeeshop)
 
 
 def get_coffe_dist(coffeeshop):
     return coffeeshop['distance']
 
 
-min_dist = sorted(coffeeshop,key=get_coffe_dist)[:5]
+five_coffeeshop = sorted(coffeeshop,key=get_coffe_dist)[:6]
 
 
-    # print(coffe_name,your_distance,coffe_coordinates[0],coffe_coordinates[1])
+m = folium.Map([55.75426247479371, 37.620765484236614], zoom_start=12)
+
+
+for i in five_coffeeshop:
+    folium.Marker(
+        location= [i['latitude'], i['longitude']],
+        tooltip="Click me!",
+        popup="Mt. Hood Meadows",
+        icon=folium.Icon(icon="cloud"),
+    ).add_to(m)
+
+
+m.save('map.html')
+
+
+def coffeeshop_map():
+    with open('map.html') as file:
+      return file.read()
+
+app = Flask(__name__)
+app.add_url_rule('/', 'hello', coffeeshop_map)
+app.run('0.0.0.0')
+
 
 
