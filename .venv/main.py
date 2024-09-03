@@ -32,6 +32,10 @@ def coffeeshop_map():
         return file.read()
 
 
+def get_coffe_dist(coffeeshop):
+    return coffeeshop['distance']
+
+
 def main():
     with open('coffee.json', 'r', encoding='CP1251') as my_file:
         file_contents = json.loads(my_file.read())
@@ -55,10 +59,6 @@ def main():
         coffe['latitude'] = coffe_coordinates[1]
         coffe['longitude'] = coffe_coordinates[0]
         coffeeshop.append(coffe)
-
-
-    def get_coffe_dist(coffeeshop):
-        return coffeeshop['distance']
 
 
     five_coffeeshop = sorted(coffeeshop,key=get_coffe_dist)[:6]
